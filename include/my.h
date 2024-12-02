@@ -5,11 +5,17 @@
 ** Header avec les fonctions
 */
 
-#include <stdio.h>
-#include <stdarg.h>
-
 #ifndef MY_H
     #define MY_H
-int my_top(int argc, char **argv);
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <dirent.h>
+#include <errno.h>
+#include <sys/stat.h>
+#include <ncurses.h>
+#include <time.h>
+#include <signal.h>
+#include <unistd.h>
+int display_time(void);
+int main(void);
 #endif /*my.h*/

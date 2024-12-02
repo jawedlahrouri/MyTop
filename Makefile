@@ -4,40 +4,28 @@
 ## File description:
 ## makefile
 ##
-
-NAME = libmy.a
-EXEC = my_top
-
-
-
-SRC	=	my_top.c \
+SRC	=	src/my_top.c \
 
 OBJ  	=	 $(SRC:.c=.o)
 
-LIB_OBJ =  $(LIB:.c=.o)
+TOP = my_top
+CFLAGS = -Iinclude -lncurses
 
-$(NAME):	$(LIB_OBJ)
-		ar rcs $(NAME) $(LIB_OBJ)
-		$(MAKE) clean
-		gcc -g $(SRC) -Iinclude -L. -lmy -o $(EXEC)
+$(TOP): $(OBJ)
+		gcc $(OBJ) -o $(TOP) $(CFLAGS)
 
-$(EXEC): $(OBJ) $(NAME)
-		gcc -o $(EXEC) $(OBJ) -Iinclude -L -lmy
-
-all: 	$(NAME) $(EXEC)
-
-
+all: 	$(TOP)
 
 clean:
-		rm -f $(OBJ) $(LIB_OBJ)
-
+		rm -f $(OBJ)
 
 fclean: clean
-		rm -f $(NAME) $(TEST) $(OBJ)ç
+		rm -f $(TOP)
 
 re:
 		$(MAKE) fclean
 		$(MAKE) all
+
 debug:
 		$(MAKE) clean
-		gcc -g $(SRC) -Iinclude -L. -lmy -o $(EXEC)
+		gcc -g $(SRC) -o $(TOP) $(CFLAGS)
