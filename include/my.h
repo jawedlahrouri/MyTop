@@ -18,4 +18,4 @@
 #include <unistd.h>
 int display_time(void);
 int main(void);
-#endif /*my.h*/
+#endif
