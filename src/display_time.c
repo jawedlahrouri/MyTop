@@ -68,7 +68,7 @@ int display_user(void)
             user++;
     }
     endutent();
-    mvprintw(0, 20, "users: %d", user);
+    mvprintw(0, 28, "%d user,", user);
     return 0;
 }
 
