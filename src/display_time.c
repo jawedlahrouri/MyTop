@@ -14,6 +14,8 @@
 #include <time.h>
 #include <signal.h>
 #include <unistd.h>
+#include <utmp.h>
+#include <stdarg.h>
 #include "../include/my.h"
 
 int display_time(void)
@@ -22,48 +24,90 @@ int display_time(void)
     time_t current_time;
     struct tm *local;
 
-    initscr();
-    while (1) {
-        current_time = time(NULL);
-        local = localtime(&current_time);
-        strftime(buffer, sizeof(buffer), "%H:%M:%S", local);
-        mvprintw(0, 0, "Heure : %s", buffer);
-        refresh();
-        napms(1000);
-    }
-    endwin();
+    current_time = time(NULL);
+    local = localtime(&current_time);
+    strftime(buffer, sizeof(buffer), "%H:%M:%S", local);
+    mvprintw(0, 0, "top - %s", buffer);
     return 0;
 }
 
 int display_pid(void)
 {
-    DIR *directory = opendir("/procfs");
+    DIR *directory = opendir("/proc");
     struct dirent *entry;
+    int line = 4;
 
-    if (directory == NULL)
-        return (84);
-    initscr();
-    while (1) {
-        clear();
-        entry = readdir(directory);
-        while (entry != NULL) {
-            if (my_str_isnum(entry->d_name) == 1)
-                printw("%s\n", entry->d_name);
-            entry = readdir(directory);
-        }
-        rewinddir(directory);
-        refresh();
-        napms(1000);
+    if (directory == NULL) {
+        return 84;
     }
-    if (closedir(directory) == -1)
-        return (84);
-    endwin();
-    return (0);
+    for (entry = readdir(directory);entry != NULL;
+        entry = readdir(directory)) {
+        if (my_str_isnum(entry->d_name))
+            mvprintw(line++, 0, "%s", entry->d_name);
+    }
+    closedir(directory);
+    return 0;
 }
 
+int display_white_line(void)
+{
+    attron(A_STANDOUT);
+    mvprintw(3, 0, "PID USER  PR NI VIRT RES SHR S\
+    %%CPU %%MEM TIME+ COMMAND ");
+    attroff(A_STANDOUT);
+}
+
+int display_user(void)
+{
+    struct utmp *entry;
+    int user = 0;
+
+    setutent();
+    while ((entry = getutent()) != NULL) {
+        if (entry->ut_type == USER_PROCESS)
+            user++;
+    }
+    endutent();
+    mvprintw(0, 20, "users: %d", user);
+    return 0;
+}
+
+int display_loadavg(void)
+{
+    FILE *file = fopen("/proc/loadavg", "r");
+    double loadavg1;
+    double loadavg2;
+    double loadavg3;
+
+    if (file == NULL)
+        return 84;
+    if (fscanf(file, "%lf %lf %lf", &loadavg1, &loadavg2, &loadavg3) != 3) {
+        fclose(file);
+        return 1;
+    }
+    mvprintw(0, 37, "load average: %.2f,", loadavg1);
+    mvprintw(0, 57, "%.2f,", loadavg2);
+    mvprintw(0, 63, "%.2f", loadavg3);
+    fclose(file);
+    return 0;
+}
 
 int main(void)
 {
-    display_time();
-    return 0;
+    initscr(); 
+    noecho();
+    curs_set(0);
+
+    while (1) {
+        clear();
+        display_time();
+        display_user();
+        display_white_line();
+        display_pid();
+        display_loadavg();
+        refresh();
+        napms(1000);
+    }
+    endwin();
+    return (0);
 }

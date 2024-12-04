@@ -38,4 +38,7 @@ int display_pid(void);
 int main(void);
 int display_time(void);
 int my_str_isnum(char const *str);
+int display_white_line(void);
+int display_loadavg(void);
+int display_user(void);
 #endif
