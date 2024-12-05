@@ -9,6 +9,7 @@ pathdir = src/lib
 NAME = libmy
 
 SRC	=	src/display_time.c \
+		src/display_task.c \
 		$(pathdir)/my_compute_power_rec.c \
 		$(pathdir)/my_compute_square_root.c \
 		$(pathdir)/my_isneg.c \

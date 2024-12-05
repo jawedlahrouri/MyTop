@@ -5,12 +5,10 @@
 ** Header avec les fonctions
 */
 
-
-
 #ifndef MY_H
     #define MY_H
-#include <stdio.h>
-#include <stdarg.h>
+    #include <stdio.h>
+    #include <stdarg.h>
 int my_isneg(int nb);
 int my_put_nbr(int nb);
 void my_swap(int *a, int *b);
@@ -41,4 +39,5 @@ int my_str_isnum(char const *str);
 int display_white_line(void);
 int display_loadavg(void);
 int display_user(void);
+
 #endif

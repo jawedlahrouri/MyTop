@@ -16,7 +16,9 @@
 #include <unistd.h>
 #include <utmp.h>
 #include <stdarg.h>
+#include <fcntl.h>
 #include "../include/my.h"
+
 
 int display_time(void)
 {
@@ -31,24 +33,6 @@ int display_time(void)
     return 0;
 }
 
-int display_pid(void)
-{
-    DIR *directory = opendir("/proc");
-    struct dirent *entry;
-    int line = 4;
-
-    if (directory == NULL) {
-        return 84;
-    }
-    for (entry = readdir(directory);entry != NULL;
-        entry = readdir(directory)) {
-        if (my_str_isnum(entry->d_name))
-            mvprintw(line++, 0, "%s", entry->d_name);
-    }
-    closedir(directory);
-    return 0;
-}
-
 int display_white_line(void)
 {
     attron(A_STANDOUT);
@@ -59,16 +43,18 @@ int display_white_line(void)
 
 int display_user(void)
 {
-    struct utmp *entry;
+    struct utmp entry;
     int user = 0;
+    FILE *file = fopen("/var/run/utmp", "rb");
 
-    setutent();
-    while ((entry = getutent()) != NULL) {
-        if (entry->ut_type == USER_PROCESS)
+    if (file == NULL)
+        return 84;
+    while (fread(&entry, sizeof(entry), 1, file) == 1) {
+        if (entry.ut_type == USER_PROCESS)
             user++;
     }
-    endutent();
-    mvprintw(0, 28, "%d user,", user);
+    fclose(file);
+    mvprintw(0, 20, "user: %d", user);
     return 0;
 }
 
@@ -94,15 +80,15 @@ int display_loadavg(void)
 
 int main(void)
 {
-    initscr(); 
+    initscr();
     noecho();
     curs_set(0);
-
     while (1) {
         clear();
         display_time();
         display_user();
         display_white_line();
+        display_task();
         display_pid();
         display_loadavg();
         refresh();
