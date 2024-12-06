@@ -45,7 +45,6 @@ static void update_count(const char *state, task_t *counter)
             counter->running++;
             break;
         case 'S':
-            counter->sleeping++;
         case 'I':
             counter->sleeping++;
             break;
