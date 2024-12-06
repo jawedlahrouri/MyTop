@@ -100,7 +100,7 @@ int display_task(void)
     closedir(directory);
     total = c.running + c.sleeping + c.zombie + c.stopped;
     mvprintw(1, 0, "Tasks: %d total, %d running, %d sleeping, %d stopped,\
-            %d zombie",
+    %d zombie",
             total, c.running, c.sleeping, c.stopped, c.zombie);
     return 0;
 }
