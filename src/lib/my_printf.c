@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2024
 ** my_printf
 ** File description:
-** effectue tout ce que la fonction printf peut faire
+** effectue tout ce que la fonction o peut faire
 */
 
 #include <stdio.h>

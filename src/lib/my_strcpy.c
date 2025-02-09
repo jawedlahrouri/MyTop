@@ -7,13 +7,6 @@
 ** to copy the source string
 */
 
-/*
-** EPITECH PROJECT, 2024
-** my_strlen
-** File description:
-** send back the len of the input string which is nice
-*/
-
 #include "../include/my.h"
 
 char *my_strcpy(char *dest, char const *src)

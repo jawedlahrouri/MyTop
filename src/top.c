@@ -47,14 +47,14 @@ int display_user(void)
     int user = 0;
     FILE *file = fopen("/var/run/utmp", "rb");
 
-    if (file == NULL)
+    if (file == NULL)   
         return 84;
     while (fread(&entry, sizeof(entry), 1, file) == 1) {
         if (entry.ut_type == USER_PROCESS)
             user++;
     }
     fclose(file);
-    mvprintw(0, 20, "user: %d", user);
+    mvprintw(0, 28, "%d users,", user);
     return 0;
 }
 
