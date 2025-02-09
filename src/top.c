@@ -54,7 +54,7 @@ int display_user(void)
             user++;
     }
     fclose(file);
-    mvprintw(0, 28, "%d users,", user);
+    mvprintw(0, 27, "%d users,", user);
     return 0;
 }
 
